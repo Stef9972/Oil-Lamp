@@ -6,29 +6,32 @@
     <title>3D Oil Lamp Showcase</title>
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
-        :root { --primary-blue: #4285f4; }
-        body { margin: 0; font-family: 'Inter', sans-serif; background: #f8f9fa; display: flex; flex-direction: column; align-items: center; }
-        header { width: 100%; padding: 40px 0; background: white; text-align: center; border-bottom: 1px solid #eee; }
-        
-        /* Interactive Viewer */
-        model-viewer {
-            width: 95%;
-            height: 600px;
-            max-width: 1000px;
-            background-color: #ffffff;
-            border-radius: 20px;
-            margin: 30px 0;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
-        }
+  /* This ensures the dots sit on top of the 3D model */
+  .dot {
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid white;
+    background: #4285f4; /* Bright Blue */
+    cursor: pointer;
+  }
 
-        /* Dimension Dots */
-        .dot { display: block; width: 14px; height: 14px; border-radius: 50%; border: 2px solid white; background: var(--primary-blue); box-shadow: 0 2px 4px rgba(0,0,0,0.2); cursor: pointer; }
-        .dim-label { background: #1a1a1a; color: white; border-radius: 6px; padding: 6px 12px; font-size: 13px; position: absolute; white-space: nowrap; transform: translate(20px, -12px); font-weight: 500; }
-        
-        .details { width: 90%; max-width: 800px; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin-bottom: 50px; }
-        h1 { margin: 0; font-weight: 700; color: #1a1a1a; }
-        h2 { color: var(--primary-blue); font-size: 1.2rem; }
-    </style>
+  /* This ensures the text is visible */
+  .dim-label {
+    background: #000000; /* Black background */
+    color: #ffffff;      /* White text */
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    position: absolute;
+    white-space: nowrap;
+    /* This offsets the text so it doesn't cover the dot */
+    transform: translate(25px, -10px); 
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+</style>
 </head>
 <body>
 

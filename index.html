@@ -47,15 +47,40 @@
         <h1>Oil Lamp Interactive Preview</h1>
     </header>
 
-    <model-viewer src="OilLamp.glb" ar camera-controls auto-rotate shadow-intensity="1">
-        <button class="dot" slot="hotspot-height" data-position="0 0.3 0" data-normal="0 1 0">
-            <div class="dim-label">Height: 30cm</div>
-        </button>
+    <model-viewer src="product.glb" ar camera-controls auto-rotate shadow-intensity="1">
+    
+    <button class="dot" slot="hotspot-height" data-position="0 0.13 0" data-normal="0 1 0">
+        <div class="dim-label">Height: 13cm</div>
+    </button>
 
-        <button class="dot" slot="hotspot-width" data-position="0.15 0 0" data-normal="1 0 0">
-            <div class="dim-label">Diameter: 15cm</div>
-        </button>
-    </model-viewer>
+    <button class="dot" slot="hotspot-width" data-position="0.105 0.05 0" data-normal="1 0 0">
+        <div class="dim-label">Width: 21cm</div>
+    </button>
+
+    <style>
+        .dot {
+            display: block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            background: #4285f4;
+            cursor: pointer;
+        }
+        .dim-label {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 14px;
+            position: absolute;
+            transform: translate(20px, -12px);
+            white-space: nowrap;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            pointer-events: none; /* Allows clicks to pass through to the model */
+        }
+    </style>
+</model-viewer>
 
     <div class="details">
         <h2>Product Details</h2>

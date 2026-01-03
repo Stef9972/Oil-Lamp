@@ -6,31 +6,39 @@
     <title>3D Oil Lamp Showcase</title>
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
-  /* This ensures the dots sit on top of the 3D model */
-  .dot {
-    display: block;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    border: 2px solid white;
-    background: #4285f4; /* Bright Blue */
-    cursor: pointer;
-  }
+    body, html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow-x: hidden; /* Prevents side-scrolling */
+    }
 
-  /* This ensures the text is visible */
-  .dim-label {
-    background: #000000; /* Black background */
-    color: #ffffff;      /* White text */
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 14px;
-    position: absolute;
-    white-space: nowrap;
-    /* This offsets the text so it doesn't cover the dot */
-    transform: translate(25px, -10px); 
-    opacity: 1 !important;
-    visibility: visible !important;
-  }
+    /* This makes the 3D model take up the whole screen */
+    model-viewer {
+        width: 100vw;
+        height: 100vh;
+        background-color: #ffffff;
+    }
+
+    /* Styling for the labels so they are easy to see */
+    .dot {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        border: 2px solid #fff;
+        background: #4285f4;
+    }
+
+    .dim-label {
+        background: #222;
+        color: #fff;
+        padding: 4px 10px;
+        border-radius: 4px;
+        font-size: 14px;
+        position: absolute;
+        transform: translate(20px, -10px);
+    }
 </style>
 </head>
 <body>

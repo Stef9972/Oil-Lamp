@@ -3,44 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Product View</title>
+    <title>3D Oil Lamp Showcase</title>
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
-        body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-        header { width: 100%; padding: 20px; background: #fff; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        :root { --primary-blue: #4285f4; }
+        body { margin: 0; font-family: 'Inter', sans-serif; background: #f8f9fa; display: flex; flex-direction: column; align-items: center; }
+        header { width: 100%; padding: 40px 0; background: white; text-align: center; border-bottom: 1px solid #eee; }
         
-        /* The 3D Window */
+        /* Interactive Viewer */
         model-viewer {
-            width: 90%;
-            height: 500px;
+            width: 95%;
+            height: 600px;
+            max-width: 1000px;
             background-color: #ffffff;
-            border-radius: 15px;
-            margin: 20px 0;
-            --poster-color: transparent;
+            border-radius: 20px;
+            margin: 30px 0;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
         }
 
-        /* Dimension Labels */
-        .dot { display: block; width: 15px; height: 15px; border-radius: 50%; border: 2px solid white; background: #4285f4; cursor: pointer; }
-        .dim-label { background: #333; color: #fff; border-radius: 4px; padding: 5px 10px; font-size: 13px; position: absolute; white-space: nowrap; transform: translate(15px, -10px); }
+        /* Dimension Dots */
+        .dot { display: block; width: 14px; height: 14px; border-radius: 50%; border: 2px solid white; background: var(--primary-blue); box-shadow: 0 2px 4px rgba(0,0,0,0.2); cursor: pointer; }
+        .dim-label { background: #1a1a1a; color: white; border-radius: 6px; padding: 6px 12px; font-size: 13px; position: absolute; white-space: nowrap; transform: translate(20px, -12px); font-weight: 500; }
         
-        .card { background: white; width: 85%; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .details { width: 90%; max-width: 800px; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin-bottom: 50px; }
+        h1 { margin: 0; font-weight: 700; color: #1a1a1a; }
+        h2 { color: var(--primary-blue); font-size: 1.2rem; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>3D Product Presentation</h1>
+        <h1>Oil Lamp Interactive Preview</h1>
     </header>
 
     <model-viewer src="product.glb" ar camera-controls auto-rotate shadow-intensity="1">
-        <button class="dot" slot="hotspot-dim1" data-position="0 1 0" data-normal="0 1 0">
-            <div class="dim-label">Height: 100cm</div>
+        <button class="dot" slot="hotspot-height" data-position="0 0.3 0" data-normal="0 1 0">
+            <div class="dim-label">Height: 30cm</div>
+        </button>
+
+        <button class="dot" slot="hotspot-width" data-position="0.15 0 0" data-normal="1 0 0">
+            <div class="dim-label">Diameter: 15cm</div>
         </button>
     </model-viewer>
 
-    <div class="card">
-        <h2>Product Specifications</h2>
-        <p>Use your mouse to rotate the object. Scroll to zoom in on details. If you are on a phone, tap the AR button to see it in your room.</p>
+    <div class="details">
+        <h2>Product Details</h2>
+        <p>This interactive 3D model allows you to inspect the Oil Lamp from every angle. Click the markers to see dimensions, or use the button in the corner to view it in your own space via Augmented Reality.</p>
     </div>
 
 </body>

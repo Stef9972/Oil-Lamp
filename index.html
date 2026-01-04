@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Advanced 3D Model Viewer</title>
+    <title>3D Product Viewer</title>
     <!-- Three.js and required libraries -->
     <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/GLTFLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/DeviceOrientationControls.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/WebXR.js"></script>
     <!-- Loading spinner CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -24,7 +22,7 @@
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #ffffff;
             overflow: hidden;
             touch-action: none;
         }
@@ -46,189 +44,246 @@
             cursor: grabbing;
         }
         
-        /* Controls Panel */
+        /* Compact Controls Panel */
         #controls {
             position: absolute;
-            top: 20px;
-            left: 20px;
+            top: 15px;
+            left: 15px;
             background: rgba(255, 255, 255, 0.95);
-            padding: 20px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             z-index: 100;
             backdrop-filter: blur(10px);
-            max-width: 300px;
-            width: 90%;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            width: 180px;
         }
         
-        @media (max-width: 768px) {
-            #controls {
-                padding: 15px;
-                max-width: calc(100vw - 40px);
-            }
+        .control-section {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         }
         
-        .control-group {
-            margin-bottom: 15px;
+        .control-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
         }
         
-        .control-title {
+        .section-title {
             font-weight: 600;
             color: #333;
-            margin-bottom: 8px;
-            font-size: 16px;
+            margin-bottom: 6px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 5px;
         }
         
-        .control-title i {
-            color: #667eea;
-        }
-        
-        /* Buttons */
+        /* Compact Buttons */
         .btn {
-            padding: 12px 20px;
-            margin: 5px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 8px 10px;
+            margin: 3px 0;
+            background: #4a6fa5;
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.3s ease;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
+            justify-content: flex-start;
+            gap: 6px;
             width: 100%;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            text-align: left;
         }
         
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+            background: #3a5a8a;
         }
         
-        .btn:active {
-            transform: translateY(0);
+        .btn i {
+            width: 16px;
+            text-align: center;
         }
         
         .btn-secondary {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            box-shadow: 0 4px 15px rgba(240, 147, 251, 0.4);
+            background: #6c757d;
         }
         
         .btn-secondary:hover {
-            box-shadow: 0 6px 20px rgba(240, 147, 251, 0.6);
+            background: #5a6268;
         }
         
-        .btn-sm {
-            padding: 8px 15px;
-            font-size: 13px;
+        .btn-warning {
+            background: #f59e0b;
         }
         
-        /* Mobile-specific buttons */
-        .mobile-controls {
+        .btn-warning:hover {
+            background: #d97706;
+        }
+        
+        .btn-danger {
+            background: #ef4444;
+        }
+        
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+        
+        /* Admin Panel */
+        #adminPanel {
             display: none;
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(248, 249, 250, 0.9);
+            border-radius: 6px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .admin-input-group {
+            margin-bottom: 8px;
+        }
+        
+        .admin-label {
+            display: block;
+            color: #495057;
+            margin-bottom: 3px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+        
+        .admin-input {
+            width: 100%;
+            padding: 6px 8px;
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            color: #333;
+            font-size: 12px;
+        }
+        
+        .admin-input:focus {
+            outline: none;
+            border-color: #4a6fa5;
+        }
+        
+        .dimensions-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px;
+            margin-top: 5px;
+        }
+        
+        /* Dimensions Display */
+        #dimensionsDisplay {
             position: absolute;
-            bottom: 20px;
-            right: 20px;
-            gap: 10px;
-        }
-        
-        .mobile-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.9);
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            color: #667eea;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-        
-        .mobile-btn:active {
-            transform: scale(0.9);
-        }
-        
-        @media (max-width: 768px) {
-            .mobile-controls {
-                display: flex;
-                flex-direction: column;
-            }
-        }
-        
-        /* Dimensions Panel */
-        #dimensions {
-            position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 15px;
+            right: 15px;
             background: rgba(255, 255, 255, 0.95);
-            padding: 20px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             z-index: 100;
             backdrop-filter: blur(10px);
-            min-width: 180px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            min-width: 150px;
             display: none;
-            animation: slideIn 0.3s ease;
-        }
-        
-        @keyframes slideIn {
-            from {
-                transform: translateX(100px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
         }
         
         .dimension-title {
-            font-weight: 700;
+            font-weight: 600;
             color: #333;
-            margin-bottom: 15px;
-            font-size: 18px;
+            margin-bottom: 8px;
+            font-size: 12px;
             text-align: center;
-            border-bottom: 2px solid #667eea;
-            padding-bottom: 8px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         }
         
         .dimension-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin: 10px 0;
-            padding: 8px 0;
-            border-bottom: 1px solid #eee;
+            margin: 6px 0;
+            font-size: 11px;
         }
         
         .dimension-label {
-            font-weight: 600;
-            color: #555;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            font-weight: 500;
+            color: #666;
         }
         
         .dimension-value {
-            font-weight: 700;
-            color: #667eea;
-            font-size: 18px;
+            font-weight: 600;
+            color: #333;
         }
         
-        .dimension-unit {
-            font-size: 12px;
-            color: #888;
-            margin-left: 2px;
+        /* Help Button */
+        #helpButton {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            width: 40px;
+            height: 40px;
+            background: #10b981;
+            border-radius: 50%;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+            z-index: 100;
+        }
+        
+        /* Instructions Panel */
+        #instructions {
+            position: absolute;
+            bottom: 65px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            width: 250px;
+            display: none;
+        }
+        
+        .instructions-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .instructions-content {
+            color: #666;
+            line-height: 1.5;
+            font-size: 11px;
+        }
+        
+        .instruction-item {
+            margin: 6px 0;
+            padding-left: 18px;
+            position: relative;
+        }
+        
+        .instruction-item i {
+            position: absolute;
+            left: 0;
+            top: 2px;
+            color: #4a6fa5;
+            font-size: 10px;
         }
         
         /* Loading Spinner */
@@ -238,7 +293,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #ffffff;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -248,13 +303,13 @@
         }
         
         .spinner {
-            width: 70px;
-            height: 70px;
-            border: 5px solid rgba(255, 255, 255, 0.3);
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(74, 111, 165, 0.3);
             border-radius: 50%;
-            border-top-color: white;
+            border-top-color: #4a6fa5;
             animation: spin 1s ease-in-out infinite;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
         @keyframes spin {
@@ -262,304 +317,206 @@
         }
         
         .loading-text {
-            color: white;
-            font-size: 20px;
+            color: #333;
+            font-size: 16px;
             font-weight: 600;
             text-align: center;
-            margin-top: 20px;
+            margin-top: 15px;
         }
         
         .loading-details {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 14px;
-            margin-top: 10px;
-            text-align: center;
-        }
-        
-        /* Progress Bar */
-        .progress-container {
-            width: 80%;
-            max-width: 300px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-            margin-top: 20px;
-            overflow: hidden;
-        }
-        
-        .progress-bar {
-            height: 8px;
-            background: white;
-            width: 0%;
-            border-radius: 10px;
-            transition: width 0.3s ease;
-        }
-        
-        /* Instructions */
-        #instructions {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.95);
-            padding: 15px 25px;
-            border-radius: 16px;
-            font-size: 14px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            max-width: 90%;
-        }
-        
-        .instructions-title {
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 8px;
-        }
-        
-        .instructions-content {
             color: #666;
-            line-height: 1.6;
+            font-size: 12px;
+            margin-top: 8px;
+            text-align: center;
         }
         
-        /* AR Mode Styles */
-        .ar-button {
-            position: absolute;
-            bottom: 100px;
-            right: 20px;
-            background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
-            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
-        }
+        /* Color for dimensions */
+        .dim-x { color: #ef4444; }
+        .dim-y { color: #10b981; }
+        .dim-z { color: #3b82f6; }
         
-        .ar-button:hover {
-            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.6);
-        }
-        
-        /* Timer Display */
-        .timer-display {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-size: 14px;
-            display: none;
-            z-index: 100;
-        }
-        
-        /* Wireframe Overlay Style */
-        .wireframe-active {
-            filter: brightness(1.2);
-        }
-        
-        /* Responsive Adjustments */
-        @media (max-width: 480px) {
+        /* Responsive */
+        @media (max-width: 768px) {
             #controls {
-                top: 10px;
-                left: 10px;
-                right: 10px;
-                width: auto;
-            }
-            
-            #dimensions {
-                top: 10px;
-                right: 10px;
-                max-width: calc(100% - 20px);
-            }
-            
-            #instructions {
-                bottom: 80px;
-                font-size: 12px;
+                width: 160px;
+                padding: 10px;
             }
             
             .btn {
-                padding: 10px 15px;
-                font-size: 13px;
-            }
-            
-            .dimension-value {
-                font-size: 16px;
+                padding: 7px 8px;
+                font-size: 11px;
             }
         }
         
-        /* Landscape Mode Adjustments */
-        @media (max-height: 600px) and (orientation: landscape) {
-            #controls {
-                padding: 10px;
-                max-width: 250px;
-            }
-            
-            #dimensions {
-                max-width: 150px;
-            }
-            
-            #instructions {
-                display: none;
-            }
+        /* Admin generate button */
+        .btn-success {
+            background: #10b981;
         }
         
-        /* Touch Device Specific */
-        @media (hover: none) and (pointer: coarse) {
-            .btn:hover {
-                transform: none;
-            }
+        .btn-success:hover {
+            background: #0da271;
         }
+        
+        /* Simple grid colors */
+        .grid-x { color: #ef4444; }
+        .grid-y { color: #10b981; }
+        .grid-z { color: #3b82f6; }
     </style>
 </head>
 <body>
     <!-- Loading Screen -->
     <div id="loading">
         <div class="spinner"></div>
-        <div class="loading-text">Loading 3D Model...</div>
-        <div class="loading-details" id="loadingDetails">Initializing viewer</div>
-        <div class="progress-container">
-            <div class="progress-bar" id="progressBar"></div>
-        </div>
+        <div class="loading-text">Loading 3D Viewer</div>
+        <div class="loading-details" id="loadingDetails">Initializing...</div>
     </div>
 
     <!-- Main Container -->
     <div id="container">
         <canvas id="canvas"></canvas>
         
-        <!-- Controls Panel -->
+        <!-- Compact Controls Panel -->
         <div id="controls">
-            <div class="control-group">
-                <div class="control-title">
-                    <i class="fas fa-exchange-alt"></i>
-                    Model View
+            <div class="control-section">
+                <div class="section-title">
+                    <i class="fas fa-cube"></i>
+                    Model
                 </div>
                 <button id="switchModel" class="btn">
-                    <i class="fas fa-layer-group"></i>
-                    Switch to Cross-Section
+                    <i class="fas fa-exchange-alt"></i>
+                    Switch View
                 </button>
             </div>
             
-            <div class="control-group">
-                <div class="control-title">
-                    <i class="fas fa-expand-arrows-alt"></i>
-                    View Controls
+            <div class="control-section">
+                <div class="section-title">
+                    <i class="fas fa-eye"></i>
+                    View
                 </div>
                 <button id="resetView" class="btn btn-secondary">
                     <i class="fas fa-redo"></i>
                     Reset View
                 </button>
-                <button id="autoRotate" class="btn btn-secondary">
-                    <i class="fas fa-sync"></i>
-                    Auto Rotate
+                <button id="toggleGrid" class="btn btn-secondary">
+                    <i class="fas fa-th"></i>
+                    Grid: On
                 </button>
             </div>
             
-            <div class="control-group">
-                <div class="control-title">
-                    <i class="fas fa-cube"></i>
-                    Display Options
-                </button>
-                <div style="display: flex; gap: 10px;">
-                    <button id="toggleWireframe" class="btn btn-sm">
-                        <i class="fas fa-th"></i>
-                        Wireframe
-                    </button>
-                    <button id="toggleGrid" class="btn btn-sm">
-                        <i class="fas fa-th-large"></i>
-                        Grid
-                    </button>
-                </div>
-            </div>
-            
-            <div class="control-group">
-                <div class="control-title">
-                    <i class="fas fa-ruler-combined"></i>
-                    Measurement
-                </div>
-                <button id="measureDistance" class="btn">
+            <div class="control-section">
+                <div class="section-title">
                     <i class="fas fa-ruler"></i>
-                    Measure Distance
+                    Dimensions
+                </div>
+                <button id="toggleDimensions" class="btn btn-warning">
+                    <i class="fas fa-ruler-combined"></i>
+                    Show Dimensions
                 </button>
+            </div>
+            
+            <div class="control-section">
+                <div class="section-title">
+                    <i class="fas fa-cog"></i>
+                    Admin
+                </div>
+                <button id="toggleAdmin" class="btn btn-danger">
+                    <i class="fas fa-user-cog"></i>
+                    Admin Panel
+                </button>
+                
+                <!-- Admin Panel -->
+                <div id="adminPanel">
+                    <div class="admin-input-group">
+                        <label class="admin-label">Main Model (.glb)</label>
+                        <input type="file" id="uploadMain" accept=".glb" class="admin-input">
+                    </div>
+                    
+                    <div class="admin-input-group">
+                        <label class="admin-label">Cross-Section (.glb)</label>
+                        <input type="file" id="uploadCrossSection" accept=".glb" class="admin-input">
+                    </div>
+                    
+                    <div class="admin-input-group">
+                        <label class="admin-label">Manual Dimensions (mm)</label>
+                        <div class="dimensions-grid">
+                            <input type="number" id="manualWidth" placeholder="X (Width)" class="admin-input" step="0.01">
+                            <input type="number" id="manualDepth" placeholder="Y (Depth)" class="admin-input" step="0.01">
+                            <input type="number" id="manualHeight" placeholder="Z (Height)" class="admin-input" step="0.01">
+                            <input type="number" id="manualThickness" placeholder="Thickness" class="admin-input" step="0.01">
+                        </div>
+                    </div>
+                    
+                    <button id="saveDimensions" class="btn btn-secondary" style="margin-top: 5px;">
+                        <i class="fas fa-save"></i>
+                        Save Dimensions
+                    </button>
+                    
+                    <!-- Generate Link Button -->
+                    <button id="generateLink" class="btn btn-success" style="margin-top: 8px;">
+                        <i class="fas fa-link"></i>
+                        Generate Customer Link
+                    </button>
+                </div>
             </div>
         </div>
         
-        <!-- Dimensions Panel -->
-        <div id="dimensions">
+        <!-- Dimensions Display -->
+        <div id="dimensionsDisplay">
             <div class="dimension-title">
-                <i class="fas fa-ruler"></i>
+                <i class="fas fa-ruler-combined"></i>
                 DIMENSIONS
             </div>
             <div class="dimension-item">
-                <div class="dimension-label">
-                    <i class="fas fa-arrows-alt-h"></i>
-                    X (Width)
-                </div>
-                <span class="dimension-value">0.00<span class="dimension-unit">mm</span></span>
+                <span class="dimension-label dim-x">X (Width)</span>
+                <span class="dimension-value dim-x" id="dimX">0.00 mm</span>
             </div>
             <div class="dimension-item">
-                <div class="dimension-label">
-                    <i class="fas fa-arrows-alt-v"></i>
-                    Y (Height)
-                </div>
-                <span class="dimension-value">0.00<span class="dimension-unit">mm</span></span>
+                <span class="dimension-label dim-y">Y (Depth)</span>
+                <span class="dimension-value dim-y" id="dimY">0.00 mm</span>
             </div>
             <div class="dimension-item">
-                <div class="dimension-label">
-                    <i class="fas fa-arrows-alt-h fa-rotate-90"></i>
-                    Z (Depth)
-                </div>
-                <span class="dimension-value">0.00<span class="dimension-unit">mm</span></span>
+                <span class="dimension-label dim-z">Z (Height)</span>
+                <span class="dimension-value dim-z" id="dimZ">0.00 mm</span>
             </div>
             <div class="dimension-item" id="thicknessItem" style="display: none;">
-                <div class="dimension-label">
-                    <i class="fas fa-layer-group"></i>
-                    Thickness
-                </div>
-                <span class="dimension-value" id="thicknessValue">0.00<span class="dimension-unit">mm</span></span>
-            </div>
-            <div class="dimension-item">
-                <div class="dimension-label">
-                    <i class="fas fa-weight-hanging"></i>
-                    Volume
-                </div>
-                <span class="dimension-value" id="volumeValue">0.00<span class="dimension-unit">cm³</span></span>
+                <span class="dimension-label">Thickness</span>
+                <span class="dimension-value" id="dimThickness">0.00 mm</span>
             </div>
         </div>
         
-        <!-- Timer Display -->
-        <div class="timer-display" id="timerDisplay">
-            Dimensions will hide in: <span id="countdown">05:00</span>
-        </div>
-        
-        <!-- AR Button -->
-        <button id="arButton" class="btn ar-button" style="display: none;">
-            <i class="fas fa-vr-cardboard"></i>
-            View in AR
+        <!-- Help Button -->
+        <button id="helpButton">
+            <i class="fas fa-question"></i>
         </button>
         
-        <!-- Mobile Controls -->
-        <div class="mobile-controls">
-            <button class="mobile-btn" id="mobileRotate">
-                <i class="fas fa-sync-alt"></i>
-            </button>
-            <button class="mobile-btn" id="mobileZoomIn">
-                <i class="fas fa-search-plus"></i>
-            </button>
-            <button class="mobile-btn" id="mobileZoomOut">
-                <i class="fas fa-search-minus"></i>
-            </button>
-            <button class="mobile-btn" id="mobileReset">
-                <i class="fas fa-home"></i>
-            </button>
-        </div>
-        
-        <!-- Instructions -->
+        <!-- Instructions Panel -->
         <div id="instructions">
             <div class="instructions-title">
                 <i class="fas fa-info-circle"></i>
                 HOW TO INTERACT
             </div>
             <div class="instructions-content">
-                <span style="color: #667eea;">• Tap/Drag:</span> Rotate 
-                <span style="color: #667eea; margin-left: 15px;">• Scroll/Pinch:</span> Zoom 
-                <span style="color: #667eea; margin-left: 15px;">• Right-click/Hold:</span> Pan
+                <div class="instruction-item">
+                    <i class="fas fa-mouse-pointer"></i>
+                    <strong>Left Click:</strong> Show dimensions (5min auto-hide)
+                </div>
+                <div class="instruction-item">
+                    <i class="fas fa-mouse-pointer"></i>
+                    <strong>Right Click:</strong> Hide dimensions immediately
+                </div>
+                <div class="instruction-item">
+                    <i class="fas fa-arrows-alt"></i>
+                    <strong>Drag:</strong> Rotate the model
+                </div>
+                <div class="instruction-item">
+                    <i class="fas fa-search"></i>
+                    <strong>Scroll/Pinch:</strong> Zoom in/out
+                </div>
+                <div class="instruction-item">
+                    <i class="fas fa-hand-paper"></i>
+                    <strong>Right Drag/Hold:</strong> Pan the view
+                </div>
             </div>
         </div>
     </div>
@@ -571,336 +528,229 @@
         let currentModel = null;
         let dimensionsVisible = false;
         let dimensionTimer = null;
-        let countdownTimer = null;
-        let firstClickTime = null;
-        let clickCount = 0;
-        let autoRotate = false;
         let gridVisible = true;
-        let wireframeVisible = false;
-        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        let arSupported = false;
-        let isARMode = false;
-        let measurementMode = false;
-        let measurePoints = [];
-        let measureLine = null;
+        let isAdminMode = false;
         
+        // Manual dimensions storage
+        let manualDimensions = {
+            main: { width: null, depth: null, height: null },
+            crossSection: { width: null, depth: null, height: null, thickness: null }
+        };
+
         // Initialize the 3D viewer
         async function init() {
             updateLoadingStatus("Initializing 3D engine...");
             
-            try {
-                // Create scene
-                scene = new THREE.Scene();
-                scene.background = new THREE.Color(0xf8f9fa);
-                
-                // Setup camera
-                camera = new THREE.PerspectiveCamera(
-                    60, 
-                    window.innerWidth / window.innerHeight, 
-                    0.1, 
-                    1000
-                );
-                camera.position.set(5, 5, 5);
-                
-                // Setup renderer
-                renderer = new THREE.WebGLRenderer({ 
-                    canvas: document.getElementById('canvas'),
-                    antialias: true,
-                    alpha: true,
-                    powerPreference: "high-performance"
-                });
-                renderer.setSize(window.innerWidth, window.innerHeight);
-                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-                renderer.shadowMap.enabled = true;
-                renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-                
-                // Setup controls with mobile optimizations
-                controls = new THREE.OrbitControls(camera, renderer.domElement);
-                controls.enableDamping = true;
-                controls.dampingFactor = 0.1;
-                controls.rotateSpeed = isMobile ? 0.5 : 1.0;
-                controls.panSpeed = isMobile ? 0.5 : 1.0;
-                controls.zoomSpeed = isMobile ? 0.5 : 1.0;
-                controls.minDistance = 0.1;
-                controls.maxDistance = 50;
-                controls.maxPolarAngle = Math.PI;
-                
-                // Add lights
-                addLights();
-                
-                // Add grid helper
-                addGridHelper();
-                
-                // Check AR support
-                checkARSupport();
-                
-                // Load models with progress tracking
-                updateLoadingStatus("Loading 3D models...");
-                await loadModelsWithProgress();
-                
-                // Setup event listeners
-                setupEventListeners();
-                
-                // Setup mobile gesture handlers
-                if (isMobile) {
-                    setupMobileGestures();
-                }
-                
-                // Start animation loop
-                animate();
-                
-                // Hide loading screen
+            // Create scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xffffff);
+            
+            // Setup camera
+            camera = new THREE.PerspectiveCamera(
+                60, 
+                window.innerWidth / window.innerHeight, 
+                0.1, 
+                1000
+            );
+            camera.position.set(5, 5, 5);
+            
+            // Setup renderer
+            renderer = new THREE.WebGLRenderer({ 
+                canvas: document.getElementById('canvas'),
+                antialias: true
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            
+            // Setup controls
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.1;
+            
+            // Add lights
+            addLights();
+            
+            // Create colored grid
+            createColoredGrid();
+            
+            // Load models
+            updateLoadingStatus("Loading 3D models...");
+            await loadModels();
+            
+            // Setup event listeners
+            setupEventListeners();
+            
+            // Start animation loop
+            animate();
+            
+            // Hide loading screen
+            setTimeout(() => {
+                document.getElementById('loading').style.opacity = '0';
                 setTimeout(() => {
-                    document.getElementById('loading').style.opacity = '0';
-                    setTimeout(() => {
-                        document.getElementById('loading').style.display = 'none';
-                    }, 500);
+                    document.getElementById('loading').style.display = 'none';
                 }, 500);
-                
-            } catch (error) {
-                console.error('Initialization error:', error);
-                updateLoadingStatus(`Error: ${error.message}`);
-            }
+            }, 500);
         }
         
         // Update loading status
-        function updateLoadingStatus(message, progress = null) {
+        function updateLoadingStatus(message) {
             document.getElementById('loadingDetails').textContent = message;
-            if (progress !== null) {
-                document.getElementById('progressBar').style.width = `${progress}%`;
-            }
-        }
-        
-        // Check AR support
-        async function checkARSupport() {
-            if ('xr' in navigator) {
-                try {
-                    arSupported = await navigator.xr.isSessionSupported('immersive-ar');
-                    if (arSupported) {
-                        document.getElementById('arButton').style.display = 'block';
-                    }
-                } catch (error) {
-                    console.warn('AR not supported:', error);
-                }
-            }
         }
         
         // Add lights to scene
         function addLights() {
-            // Ambient light
             const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
             scene.add(ambientLight);
             
-            // Directional light (sun-like)
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
             directionalLight.position.set(10, 20, 10);
-            directionalLight.castShadow = true;
-            directionalLight.shadow.camera.left = -20;
-            directionalLight.shadow.camera.right = 20;
-            directionalLight.shadow.camera.top = 20;
-            directionalLight.shadow.camera.bottom = -20;
-            directionalLight.shadow.mapSize.width = 2048;
-            directionalLight.shadow.mapSize.height = 2048;
             scene.add(directionalLight);
+        }
+        
+        // Create colored grid with X-red, Y-green (Depth), Z-blue (Height)
+        function createColoredGrid() {
+            const size = 20;
+            const divisions = 20;
             
-            // Hemisphere light for natural outdoor lighting
-            const hemisphereLight = new THREE.HemisphereLight(0x87CEEB, 0x8B4513, 0.3);
-            scene.add(hemisphereLight);
-        }
-        
-        // Add grid helper
-        function addGridHelper() {
-            const gridHelper = new THREE.GridHelper(20, 20, 0x888888, 0xcccccc);
+            // Create base grid helper (gray)
+            const gridHelper = new THREE.GridHelper(size, divisions, 0x888888, 0xcccccc);
             gridHelper.position.y = -0.01;
-            gridHelper.name = 'gridHelper';
             scene.add(gridHelper);
+            
+            // Create colored axes
+            const axisLength = size / 2;
+            
+            // X-axis (red) - Width
+            const xAxisGeometry = new THREE.BufferGeometry().setFromPoints([
+                new THREE.Vector3(-axisLength, 0, 0),
+                new THREE.Vector3(axisLength, 0, 0)
+            ]);
+            const xAxisMaterial = new THREE.LineBasicMaterial({ color: 0xff4444 });
+            const xAxis = new THREE.Line(xAxisGeometry, xAxisMaterial);
+            scene.add(xAxis);
+            
+            // Y-axis (green) - Depth
+            const yAxisGeometry = new THREE.BufferGeometry().setFromPoints([
+                new THREE.Vector3(0, 0, -axisLength),
+                new THREE.Vector3(0, 0, axisLength)
+            ]);
+            const yAxisMaterial = new THREE.LineBasicMaterial({ color: 0x44ff44 });
+            const yAxis = new THREE.Line(yAxisGeometry, yAxisMaterial);
+            scene.add(yAxis);
+            
+            // Z-axis (blue) - Height
+            const zAxisGeometry = new THREE.BufferGeometry().setFromPoints([
+                new THREE.Vector3(0, -axisLength, 0),
+                new THREE.Vector3(0, axisLength, 0)
+            ]);
+            const zAxisMaterial = new THREE.LineBasicMaterial({ color: 0x4444ff });
+            const zAxis = new THREE.Line(zAxisGeometry, zAxisMaterial);
+            scene.add(zAxis);
         }
         
-        // Load models with progress tracking
-        async function loadModelsWithProgress() {
+        // Toggle grid visibility
+        function toggleGrid() {
+            gridVisible = !gridVisible;
+            
+            // Toggle all grid objects
+            scene.traverse(function(child) {
+                if (child.isLine || child.type === 'GridHelper') {
+                    child.visible = gridVisible;
+                }
+            });
+            
+            // Update button text
+            document.getElementById('toggleGrid').innerHTML = gridVisible ? 
+                '<i class="fas fa-th"></i> Grid: On' : 
+                '<i class="fas fa-th"></i> Grid: Off';
+        }
+        
+        // Load models
+        async function loadModels() {
             const loader = new THREE.GLTFLoader();
             
-            return new Promise((resolve, reject) => {
-                let modelsLoaded = 0;
-                const totalModels = 2;
-                
+            try {
                 // Load main model
-                updateLoadingStatus("Loading main model...", 25);
-                loader.load('main.glb', 
-                    function(gltf) {
-                        modelsLoaded++;
-                        updateLoadingStatus(`Loading models... (${modelsLoaded}/${totalModels})`, 25 + (modelsLoaded * 25));
-                        
-                        mainModel = gltf.scene;
-                        mainModel.name = 'main';
-                        setupModel(mainModel);
-                        
-                        // Load cross-section model
-                        updateLoadingStatus("Loading cross-section...", 50);
-                        loader.load('cross-section.glb',
-                            function(gltf) {
-                                modelsLoaded++;
-                                updateLoadingStatus(`Loading models... (${modelsLoaded}/${totalModels})`, 25 + (modelsLoaded * 25));
-                                
-                                crossSectionModel = gltf.scene;
-                                crossSectionModel.name = 'cross-section';
-                                setupModel(crossSectionModel);
-                                crossSectionModel.visible = false;
-                                
-                                // Add to scene
-                                scene.add(mainModel);
-                                scene.add(crossSectionModel);
-                                currentModel = mainModel;
-                                
-                                // Center and scale models
-                                centerModel(mainModel);
-                                centerModel(crossSectionModel);
-                                
-                                // Calculate initial dimensions
-                                calculateAndDisplayDimensions();
-                                
-                                updateLoadingStatus("Finalizing...", 100);
-                                setTimeout(resolve, 500);
-                            },
-                            // Progress callback
-                            function(xhr) {
-                                const percent = (xhr.loaded / xhr.total * 100).toFixed(2);
-                                updateLoadingStatus(`Loading cross-section... ${percent}%`, 50 + (percent / 2));
-                            },
-                            // Error callback
-                            function(error) {
-                                console.error('Error loading cross-section:', error);
-                                updateLoadingStatus("Creating placeholder model...", 75);
-                                createPlaceholderCrossSection();
-                                modelsLoaded++;
-                                resolve();
-                            }
-                        );
-                    },
-                    // Progress callback
-                    function(xhr) {
-                        const percent = (xhr.loaded / xhr.total * 100).toFixed(2);
-                        updateLoadingStatus(`Loading main model... ${percent}%`, percent / 4);
-                    },
-                    // Error callback
-                    function(error) {
-                        console.error('Error loading main model:', error);
-                        updateLoadingStatus("Creating placeholder model...", 25);
-                        createPlaceholderMainModel();
-                        modelsLoaded++;
-                        resolve();
-                    }
-                );
-            });
-        }
-        
-        // Create placeholder main model
-        function createPlaceholderMainModel() {
-            const geometry = new THREE.BoxGeometry(2, 2, 2);
-            const material = new THREE.MeshPhysicalMaterial({
-                color: 0x3498db,
-                metalness: 0.1,
-                roughness: 0.5,
-                clearcoat: 0.8,
-                clearcoatRoughness: 0.2
-            });
-            mainModel = new THREE.Mesh(geometry, material);
-            mainModel.name = 'main';
-            mainModel.castShadow = true;
-            mainModel.receiveShadow = true;
+                const mainGLTF = await new Promise((resolve, reject) => {
+                    loader.load('main.glb', resolve, undefined, reject);
+                });
+                mainModel = mainGLTF.scene;
+                mainModel.name = 'main';
+                
+                // Load cross-section model
+                const crossGLTF = await new Promise((resolve, reject) => {
+                    loader.load('cross-section.glb', resolve, undefined, reject);
+                });
+                crossSectionModel = crossGLTF.scene;
+                crossSectionModel.name = 'cross-section';
+                crossSectionModel.visible = false;
+                
+            } catch (error) {
+                console.log('Models not found, creating placeholders');
+                createPlaceholderModels();
+            }
+            
+            // Add to scene
             scene.add(mainModel);
+            scene.add(crossSectionModel);
             currentModel = mainModel;
+            
+            // Center the model
+            centerModel(currentModel);
         }
         
-        // Create placeholder cross-section
-        function createPlaceholderCrossSection() {
-            const geometry = new THREE.BoxGeometry(1.8, 1.8, 0.5);
-            const material = new THREE.MeshPhysicalMaterial({
-                color: 0xe74c3c,
+        // Create placeholder models
+        function createPlaceholderModels() {
+            // Main model placeholder
+            const mainGeometry = new THREE.BoxGeometry(2, 2, 2);
+            const mainMaterial = new THREE.MeshPhysicalMaterial({
+                color: 0x4a6fa5,
+                metalness: 0.1,
+                roughness: 0.5
+            });
+            mainModel = new THREE.Mesh(mainGeometry, mainMaterial);
+            mainModel.name = 'main';
+            
+            // Cross-section placeholder
+            const crossGeometry = new THREE.BoxGeometry(1.8, 0.3, 1.8);
+            const crossMaterial = new THREE.MeshPhysicalMaterial({
+                color: 0xf59e0b,
                 metalness: 0.1,
                 roughness: 0.5,
-                side: THREE.DoubleSide,
                 transparent: true,
                 opacity: 0.8
             });
-            crossSectionModel = new THREE.Mesh(geometry, material);
+            crossSectionModel = new THREE.Mesh(crossGeometry, crossMaterial);
             crossSectionModel.name = 'cross-section';
-            crossSectionModel.visible = false;
-            crossSectionModel.castShadow = true;
-            crossSectionModel.receiveShadow = true;
-            scene.add(crossSectionModel);
-        }
-        
-        // Setup model properties
-        function setupModel(model) {
-            model.traverse(function(child) {
-                if (child.isMesh) {
-                    // Enable shadows
-                    child.castShadow = true;
-                    child.receiveShadow = true;
-                    
-                    // Clone material for manipulation
-                    child.material = child.material.clone();
-                    child.userData.originalMaterial = child.material.clone();
-                    
-                    // Create wireframe material
-                    child.userData.wireframeMaterial = new THREE.MeshBasicMaterial({
-                        color: 0x000000,
-                        wireframe: true,
-                        transparent: true,
-                        opacity: 0.5
-                    });
-                    
-                    // Create wireframe mesh
-                    child.userData.wireframeMesh = new THREE.Mesh(child.geometry, child.userData.wireframeMaterial);
-                    child.userData.wireframeMesh.visible = false;
-                    child.add(child.userData.wireframeMesh);
-                    
-                    // Add outline effect for selection
-                    child.userData.outlineMaterial = new THREE.MeshBasicMaterial({
-                        color: 0x00ff00,
-                        side: THREE.BackSide,
-                        transparent: true,
-                        opacity: 0.3
-                    });
-                    
-                    child.userData.outlineMesh = new THREE.Mesh(child.geometry, child.userData.outlineMaterial);
-                    child.userData.outlineMesh.scale.multiplyScalar(1.05);
-                    child.userData.outlineMesh.visible = false;
-                    child.add(child.userData.outlineMesh);
-                }
-            });
         }
         
         // Switch between models
         function switchModel() {
             if (!mainModel || !crossSectionModel) return;
             
-            // Hide dimensions when switching
-            hideDimensions();
+            // Hide dimensions when switching models
+            if (dimensionsVisible) {
+                hideDimensions();
+            }
             
             if (currentModel === mainModel) {
                 mainModel.visible = false;
                 crossSectionModel.visible = true;
                 currentModel = crossSectionModel;
-                document.getElementById('switchModel').innerHTML = '<i class="fas fa-cube"></i> Switch to Main';
+                document.getElementById('switchModel').innerHTML = 
+                    '<i class="fas fa-cube"></i> Switch to Main';
                 document.getElementById('thicknessItem').style.display = 'flex';
             } else {
                 crossSectionModel.visible = false;
                 mainModel.visible = true;
                 currentModel = mainModel;
-                document.getElementById('switchModel').innerHTML = '<i class="fas fa-layer-group"></i> Switch to Cross-Section';
+                document.getElementById('switchModel').innerHTML = 
+                    '<i class="fas fa-layer-group"></i> Switch to Cross-Section';
                 document.getElementById('thicknessItem').style.display = 'none';
             }
             
-            // Apply wireframe if active
-            toggleWireframeOnModel(currentModel, wireframeVisible);
-            
             // Center the new model
             centerModel(currentModel);
-            
-            // Calculate and display dimensions
-            calculateAndDisplayDimensions();
         }
         
         // Center model in view
@@ -909,19 +759,13 @@
             const center = box.getCenter(new THREE.Vector3());
             const size = box.getSize(new THREE.Vector3());
             
-            // Adjust controls target
             controls.target.copy(center);
             controls.update();
             
-            // Adjust camera distance based on model size
             const maxDim = Math.max(size.x, size.y, size.z);
-            const fov = camera.fov * (Math.PI / 180);
-            const distance = Math.abs(maxDim / Math.sin(fov / 2));
-            
             camera.position.copy(center);
-            camera.position.z += distance * 1.5;
+            camera.position.z += maxDim * 1.5;
             
-            // Update camera
             camera.lookAt(center);
         }
         
@@ -929,306 +773,430 @@
         function calculateAndDisplayDimensions() {
             if (!currentModel) return;
             
-            // Calculate bounding box
-            const box = new THREE.Box3().setFromObject(currentModel);
-            const size = box.getSize(new THREE.Vector3());
+            let width, depth, height, thickness;
+            const modelName = currentModel.name;
+            const manualDims = manualDimensions[modelName];
             
-            // Convert to millimeters (assuming 1 unit = 1 meter)
-            const scale = 1000; // Convert meters to millimeters
-            const width = size.x * scale;
-            const height = size.y * scale;
-            const depth = size.z * scale;
-            
-            // Update dimension display
-            document.querySelectorAll('.dimension-value')[0].textContent = width.toFixed(2);
-            document.querySelectorAll('.dimension-value')[1].textContent = height.toFixed(2);
-            document.querySelectorAll('.dimension-value')[2].textContent = depth.toFixed(2);
-            
-            // Calculate volume (approximate)
-            const volume = (size.x * size.y * size.z) * 1000000; // Convert to cm³
-            document.getElementById('volumeValue').textContent = volume.toFixed(2);
-            
-            // Calculate thickness for cross-section (minimum dimension)
-            if (currentModel.name === 'cross-section') {
-                const thickness = Math.min(width, height, depth);
-                document.getElementById('thicknessValue').textContent = thickness.toFixed(2);
-            }
-        }
-        
-        // Show dimensions with timer
-        function showDimensions() {
-            if (!currentModel || dimensionsVisible) return;
-            
-            // Calculate dimensions
-            calculateAndDisplayDimensions();
-            
-            // Show dimension panel and timer
-            document.getElementById('dimensions').style.display = 'block';
-            document.getElementById('timerDisplay').style.display = 'block';
-            dimensionsVisible = true;
-            
-            // Apply wireframe overlay
-            toggleWireframeOnModel(currentModel, true);
-            
-            // Start 5-minute countdown (300 seconds)
-            let timeLeft = 300; // 5 minutes in seconds
-            
-            // Update countdown display
-            function updateCountdown() {
-                const minutes = Math.floor(timeLeft / 60);
-                const seconds = timeLeft % 60;
-                document.getElementById('countdown').textContent = 
-                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            // Check for manual dimensions first
+            if (manualDims.width && manualDims.depth && manualDims.height) {
+                width = manualDims.width;
+                depth = manualDims.depth;
+                height = manualDims.height;
                 
-                if (timeLeft <= 0) {
-                    hideDimensions();
-                } else {
-                    timeLeft--;
+                if (modelName === 'cross-section') {
+                    thickness = manualDims.thickness || calculateThickness();
+                }
+            } else {
+                // Calculate from bounding box
+                const box = new THREE.Box3().setFromObject(currentModel);
+                const size = box.getSize(new THREE.Vector3());
+                
+                const scale = 1000;
+                width = size.x * scale;
+                depth = size.z * scale; // Y-axis is Depth
+                height = size.y * scale; // Z-axis is Height
+                
+                if (modelName === 'cross-section') {
+                    thickness = calculateThickness();
                 }
             }
             
-            // Only start countdown on first click
-            if (clickCount === 0) {
-                firstClickTime = Date.now();
-                updateCountdown(); // Initial display
-                countdownTimer = setInterval(updateCountdown, 1000);
-                
-                // Set auto-hide timer
-                dimensionTimer = setTimeout(() => {
-                    hideDimensions();
-                }, 300000); // 5 minutes
-            }
+            // Update dimension display
+            document.getElementById('dimX').textContent = width.toFixed(2) + ' mm';
+            document.getElementById('dimY').textContent = depth.toFixed(2) + ' mm';
+            document.getElementById('dimZ').textContent = height.toFixed(2) + ' mm';
             
-            clickCount++;
+            if (currentModel.name === 'cross-section') {
+                document.getElementById('dimThickness').textContent = thickness.toFixed(2) + ' mm';
+            }
+        }
+        
+        // Calculate thickness
+        function calculateThickness() {
+            if (currentModel.name !== 'cross-section') return 0;
+            
+            const box = new THREE.Box3().setFromObject(currentModel);
+            const size = box.getSize(new THREE.Vector3());
+            const scale = 1000;
+            
+            return Math.min(size.x, size.y, size.z) * scale;
+        }
+        
+        // Toggle dimensions display
+        function toggleDimensions() {
+            if (dimensionsVisible) {
+                hideDimensions();
+            } else {
+                showDimensions();
+            }
+        }
+        
+        // Show dimensions (NO lines around object)
+        function showDimensions() {
+            if (!currentModel || dimensionsVisible) return;
+            
+            // Calculate and display dimensions
+            calculateAndDisplayDimensions();
+            
+            // Show dimension display
+            document.getElementById('dimensionsDisplay').style.display = 'block';
+            dimensionsVisible = true;
+            
+            // Update button text
+            document.getElementById('toggleDimensions').innerHTML = 
+                '<i class="fas fa-eye-slash"></i> Hide Dimensions';
+            
+            // Start auto-hide timer (5 minutes)
+            if (dimensionTimer) {
+                clearTimeout(dimensionTimer);
+            }
+            dimensionTimer = setTimeout(hideDimensions, 300000);
         }
         
         // Hide dimensions
         function hideDimensions() {
             if (!dimensionsVisible) return;
             
-            document.getElementById('dimensions').style.display = 'none';
-            document.getElementById('timerDisplay').style.display = 'none';
+            document.getElementById('dimensionsDisplay').style.display = 'none';
             dimensionsVisible = false;
             
-            // Remove wireframe overlay
-            toggleWireframeOnModel(currentModel, false);
-            
-            // Clear timers
+            // Clear timer
             if (dimensionTimer) {
                 clearTimeout(dimensionTimer);
                 dimensionTimer = null;
             }
             
-            if (countdownTimer) {
-                clearInterval(countdownTimer);
-                countdownTimer = null;
-            }
-            
-            clickCount = 0;
-            firstClickTime = null;
-        }
-        
-        // Toggle wireframe on model
-        function toggleWireframeOnModel(model, show) {
-            if (!model) return;
-            
-            model.traverse(function(child) {
-                if (child.isMesh && child.userData.wireframeMesh) {
-                    child.userData.wireframeMesh.visible = show;
-                    
-                    // Add visual effect when wireframe is active
-                    if (show) {
-                        child.material.emissive = new THREE.Color(0x222222);
-                        child.material.needsUpdate = true;
-                    } else {
-                        child.material.emissive = new THREE.Color(0x000000);
-                        child.material.needsUpdate = true;
-                    }
-                }
-            });
-        }
-        
-        // Toggle grid visibility
-        function toggleGrid() {
-            gridVisible = !gridVisible;
-            scene.traverse(function(child) {
-                if (child.name === 'gridHelper') {
-                    child.visible = gridVisible;
-                }
-            });
-            
             // Update button text
-            const button = document.getElementById('toggleGrid');
-            button.innerHTML = gridVisible ? 
-                '<i class="fas fa-th-large"></i> Hide Grid' : 
-                '<i class="fas fa-th-large"></i> Show Grid';
-        }
-        
-        // Toggle wireframe
-        function toggleWireframe() {
-            wireframeVisible = !wireframeVisible;
-            toggleWireframeOnModel(currentModel, wireframeVisible);
-            
-            // Update button text
-            const button = document.getElementById('toggleWireframe');
-            button.innerHTML = wireframeVisible ? 
-                '<i class="fas fa-th"></i> Hide Wireframe' : 
-                '<i class="fas fa-th"></i> Show Wireframe';
-        }
-        
-        // Toggle auto rotation
-        function toggleAutoRotate() {
-            autoRotate = !autoRotate;
-            controls.autoRotate = autoRotate;
-            controls.autoRotateSpeed = 1.0;
-            
-            // Update button text
-            const button = document.getElementById('autoRotate');
-            button.innerHTML = autoRotate ? 
-                '<i class="fas fa-stop"></i> Stop Rotation' : 
-                '<i class="fas fa-sync"></i> Auto Rotate';
+            document.getElementById('toggleDimensions').innerHTML = 
+                '<i class="fas fa-ruler-combined"></i> Show Dimensions';
         }
         
         // Handle model click
         function onModelClick(event) {
             event.preventDefault();
             
-            // Only handle left and right clicks
             if (event.button !== 0 && event.button !== 2) return;
             
-            // Calculate mouse position
             const mouse = new THREE.Vector2();
             const rect = renderer.domElement.getBoundingClientRect();
             mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
             mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
             
-            // Raycasting
             const raycaster = new THREE.Raycaster();
             raycaster.setFromCamera(mouse, camera);
             
-            // Check for intersections with visible models
             const visibleModels = [];
-            scene.traverse(function(child) {
-                if (child.isMesh && child.parent && 
-                    (child.parent.name === 'main' || child.parent.name === 'cross-section') &&
-                    child.parent.visible) {
-                    visibleModels.push(child);
-                }
-            });
+            if (mainModel.visible) visibleModels.push(mainModel);
+            if (crossSectionModel.visible) visibleModels.push(crossSectionModel);
             
             const intersects = raycaster.intersectObjects(visibleModels, true);
             
             if (intersects.length > 0) {
                 if (event.button === 0) { // Left click
-                    // Highlight the clicked mesh
-                    highlightMesh(intersects[0].object);
-                    
-                    // Show dimensions (timer doesn't restart on multiple clicks)
-                    showDimensions();
+                    if (!dimensionsVisible) {
+                        showDimensions();
+                    }
                 } else if (event.button === 2) { // Right click
-                    // Hide dimensions immediately
-                    hideDimensions();
-                }
-            } else {
-                // Clicked outside model
-                if (event.button === 2) { // Right click
                     hideDimensions();
                 }
             }
         }
         
-        // Highlight mesh on click
-        function highlightMesh(mesh) {
-            // Remove previous highlights
-            scene.traverse(function(child) {
-                if (child.isMesh && child.userData.outlineMesh) {
-                    child.userData.outlineMesh.visible = false;
+        // Toggle admin panel
+        function toggleAdminPanel() {
+            isAdminMode = !isAdminMode;
+            const adminPanel = document.getElementById('adminPanel');
+            
+            if (isAdminMode) {
+                adminPanel.style.display = 'block';
+                document.getElementById('toggleAdmin').innerHTML = 
+                    '<i class="fas fa-times"></i> Close Admin';
+            } else {
+                adminPanel.style.display = 'none';
+                document.getElementById('toggleAdmin').innerHTML = 
+                    '<i class="fas fa-user-cog"></i> Admin Panel';
+            }
+        }
+        
+        // Handle file upload
+        async function handleFileUpload(event, isMainModel) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            if (!file.name.endsWith('.glb')) {
+                alert('Please upload a .glb file');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                try {
+                    const loader = new THREE.GLTFLoader();
+                    const arrayBuffer = e.target.result;
+                    const gltf = loader.parse(arrayBuffer, '');
+                    
+                    const newModel = gltf.scene;
+                    newModel.name = isMainModel ? 'main' : 'cross-section';
+                    
+                    // Remove old model from scene
+                    if (isMainModel) {
+                        scene.remove(mainModel);
+                        mainModel = newModel;
+                        if (currentModel.name === 'main') {
+                            currentModel = mainModel;
+                        }
+                    } else {
+                        scene.remove(crossSectionModel);
+                        crossSectionModel = newModel;
+                        if (currentModel.name === 'cross-section') {
+                            currentModel = crossSectionModel;
+                        }
+                    }
+                    
+                    // Add new model to scene
+                    scene.add(newModel);
+                    
+                    // Center the model
+                    centerModel(newModel);
+                    
+                    alert('Model uploaded successfully!');
+                } catch (error) {
+                    console.error('Error loading model:', error);
+                    alert('Error loading model. Please check the file format.');
                 }
+            };
+            
+            reader.readAsArrayBuffer(file);
+        }
+        
+        // Save manual dimensions
+        function saveManualDimensions() {
+            const modelName = currentModel.name;
+            const dimensions = manualDimensions[modelName];
+            
+            dimensions.width = parseFloat(document.getElementById('manualWidth').value) || null;
+            dimensions.depth = parseFloat(document.getElementById('manualDepth').value) || null;
+            dimensions.height = parseFloat(document.getElementById('manualHeight').value) || null;
+            
+            if (modelName === 'cross-section') {
+                dimensions.thickness = parseFloat(document.getElementById('manualThickness').value) || null;
+            }
+            
+            // Update display if dimensions are visible
+            if (dimensionsVisible) {
+                calculateAndDisplayDimensions();
+            }
+            
+            alert('Dimensions saved!');
+        }
+        
+        // Show help instructions for 30 seconds
+        function showHelpInstructions() {
+            const instructions = document.getElementById('instructions');
+            instructions.style.display = 'block';
+            
+            setTimeout(() => {
+                instructions.style.display = 'none';
+            }, 30000);
+        }
+        
+        // Generate customer link
+        function generateCustomerLink() {
+            // Create a simplified customer view
+            const customerHTML = `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product 3D View</title>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
+    <style>
+        body { margin: 0; padding: 0; background: #fff; overflow: hidden; }
+        canvas { display: block; }
+        #dimensions {
+            position: absolute; top: 15px; right: 15px;
+            background: rgba(255,255,255,0.95); padding: 10px;
+            border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            font-family: Arial, sans-serif; font-size: 12px;
+            display: none;
+        }
+        #helpButton {
+            position: absolute; bottom: 15px; right: 15px;
+            width: 40px; height: 40px; background: #10b981;
+            border-radius: 50%; border: none; color: white;
+            font-size: 16px; cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <div id="dimensions"></div>
+    <button id="helpButton">?</button>
+    <script>
+        let scene, camera, renderer, controls;
+        let mainModel, crossModel;
+        let currentModel = null;
+        let dimensionsVisible = false;
+        let dimensionTimer = null;
+        
+        function init() {
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xffffff);
+            
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 1000);
+            camera.position.set(5, 5, 5);
+            
+            renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('canvas'), antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            
+            scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(10, 20, 10);
+            scene.add(directionalLight);
+            
+            const loader = new THREE.GLTFLoader();
+            
+            loader.load('main.glb', function(gltf) {
+                mainModel = gltf.scene;
+                scene.add(mainModel);
+                currentModel = mainModel;
+                
+                loader.load('cross-section.glb', function(gltf) {
+                    crossModel = gltf.scene;
+                    crossModel.visible = false;
+                    scene.add(crossModel);
+                    
+                    centerModel(currentModel);
+                });
             });
             
-            // Highlight clicked mesh
-            if (mesh.userData.outlineMesh) {
-                mesh.userData.outlineMesh.visible = true;
-                
-                // Remove highlight after 2 seconds
-                setTimeout(() => {
-                    if (mesh.userData.outlineMesh) {
-                        mesh.userData.outlineMesh.visible = false;
-                    }
-                }, 2000);
+            animate();
+            
+            window.addEventListener('resize', function() {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+            
+            document.getElementById('helpButton').addEventListener('click', function() {
+                alert('Left click: Show dimensions\\nRight click: Hide dimensions\\nDrag: Rotate\\nScroll: Zoom\\nRight drag: Pan');
+            });
+        }
+        
+        function centerModel(model) {
+            const box = new THREE.Box3().setFromObject(model);
+            const center = box.getCenter(new THREE.Vector3());
+            controls.target.copy(center);
+            camera.position.copy(center);
+            camera.position.z += 10;
+        }
+        
+        function showDimensions() {
+            if (!currentModel || dimensionsVisible) return;
+            
+            const box = new THREE.Box3().setFromObject(currentModel);
+            const size = box.getSize(new THREE.Vector3());
+            const scale = 1000;
+            
+            document.getElementById('dimensions').innerHTML = \`
+                <div style="font-weight: bold; margin-bottom: 8px; border-bottom: 1px solid #ccc; padding-bottom: 5px;">
+                    DIMENSIONS
+                </div>
+                <div style="color: #ef4444;">X (Width): \${(size.x * scale).toFixed(2)} mm</div>
+                <div style="color: #10b981;">Y (Depth): \${(size.z * scale).toFixed(2)} mm</div>
+                <div style="color: #3b82f6;">Z (Height): \${(size.y * scale).toFixed(2)} mm</div>
+            \`;
+            document.getElementById('dimensions').style.display = 'block';
+            dimensionsVisible = true;
+            
+            dimensionTimer = setTimeout(() => {
+                document.getElementById('dimensions').style.display = 'none';
+                dimensionsVisible = false;
+            }, 300000);
+        }
+        
+        function hideDimensions() {
+            if (!dimensionsVisible) return;
+            document.getElementById('dimensions').style.display = 'none';
+            dimensionsVisible = false;
+            if (dimensionTimer) clearTimeout(dimensionTimer);
+        }
+        
+        renderer.domElement.addEventListener('mousedown', function(e) {
+            if (e.button === 0) {
+                if (!dimensionsVisible) showDimensions();
+            } else if (e.button === 2) {
+                hideDimensions();
             }
+        });
+        
+        renderer.domElement.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>`;
+            
+            // Create blob and open in new tab
+            const blob = new Blob([customerHTML], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            
+            const newTab = window.open(url, '_blank');
+            if (!newTab) {
+                alert('Please allow popups to generate customer link');
+            }
+            
+            // Also provide download option
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'customer-view.html';
+            a.click();
+            
+            alert('Customer link generated and downloaded! Share the HTML file with your customer.');
         }
         
         // Setup event listeners
         function setupEventListeners() {
-            // Mouse events
             renderer.domElement.addEventListener('mousedown', onModelClick);
             renderer.domElement.addEventListener('contextmenu', function(e) {
                 e.preventDefault();
             });
             
-            // Touch events for mobile
-            renderer.domElement.addEventListener('touchstart', function(e) {
-                if (e.touches.length === 1) {
-                    // Simulate left click for single touch
-                    const touch = e.touches[0];
-                    const clickEvent = new MouseEvent('mousedown', {
-                        clientX: touch.clientX,
-                        clientY: touch.clientY,
-                        button: 0
-                    });
-                    onModelClick(clickEvent);
-                }
-            });
-            
-            // Touch hold for right click (long press)
-            let touchTimer;
-            renderer.domElement.addEventListener('touchstart', function(e) {
-                if (e.touches.length === 1) {
-                    touchTimer = setTimeout(() => {
-                        hideDimensions();
-                    }, 500); // Long press duration
-                }
-            });
-            
-            renderer.domElement.addEventListener('touchend', function() {
-                clearTimeout(touchTimer);
-            });
-            
-            // Control buttons
             document.getElementById('switchModel').addEventListener('click', switchModel);
             document.getElementById('resetView').addEventListener('click', function() {
                 controls.reset();
                 centerModel(currentModel);
             });
-            document.getElementById('autoRotate').addEventListener('click', toggleAutoRotate);
-            document.getElementById('toggleWireframe').addEventListener('click', toggleWireframe);
             document.getElementById('toggleGrid').addEventListener('click', toggleGrid);
-            document.getElementById('measureDistance').addEventListener('click', toggleMeasurementMode);
-            document.getElementById('arButton').addEventListener('click', enterARMode);
+            document.getElementById('toggleDimensions').addEventListener('click', toggleDimensions);
+            document.getElementById('toggleAdmin').addEventListener('click', toggleAdminPanel);
+            document.getElementById('helpButton').addEventListener('click', showHelpInstructions);
             
-            // Mobile control buttons
-            document.getElementById('mobileRotate').addEventListener('click', toggleAutoRotate);
-            document.getElementById('mobileZoomIn').addEventListener('click', function() {
-                camera.position.multiplyScalar(0.9);
-            });
-            document.getElementById('mobileZoomOut').addEventListener('click', function() {
-                camera.position.multiplyScalar(1.1);
-            });
-            document.getElementById('mobileReset').addEventListener('click', function() {
-                controls.reset();
-                centerModel(currentModel);
-            });
+            document.getElementById('uploadMain').addEventListener('change', (e) => handleFileUpload(e, true));
+            document.getElementById('uploadCrossSection').addEventListener('change', (e) => handleFileUpload(e, false));
+            document.getElementById('saveDimensions').addEventListener('click', saveManualDimensions);
+            document.getElementById('generateLink').addEventListener('click', generateCustomerLink);
             
-            // Window resize
             window.addEventListener('resize', function() {
                 camera.aspect = window.innerWidth / window.innerHeight;
                 camera.updateProjectionMatrix();
                 renderer.setSize(window.innerWidth, window.innerHeight);
-                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             });
             
-            // Keyboard shortcuts
             document.addEventListener('keydown', function(e) {
                 switch(e.key) {
                     case ' ':
@@ -1239,9 +1207,9 @@
                         controls.reset();
                         centerModel(currentModel);
                         break;
-                    case 'w':
-                    case 'W':
-                        toggleWireframe();
+                    case 'd':
+                    case 'D':
+                        toggleDimensions();
                         break;
                     case 'g':
                     case 'G':
@@ -1249,258 +1217,15 @@
                         break;
                     case 'Escape':
                         hideDimensions();
-                        if (measurementMode) {
-                            toggleMeasurementMode();
-                        }
                         break;
                 }
             });
         }
         
-        // Setup mobile gestures
-        function setupMobileGestures() {
-            let initialDistance = 0;
-            let initialScale = 1;
-            
-            renderer.domElement.addEventListener('touchmove', function(e) {
-                if (e.touches.length === 2) {
-                    // Pinch to zoom
-                    const distance = Math.hypot(
-                        e.touches[0].clientX - e.touches[1].clientX,
-                        e.touches[0].clientY - e.touches[1].clientY
-                    );
-                    
-                    if (initialDistance === 0) {
-                        initialDistance = distance;
-                        initialScale = camera.position.length();
-                    }
-                    
-                    const scale = initialScale * (distance / initialDistance);
-                    camera.position.normalize().multiplyScalar(scale);
-                }
-            });
-            
-            renderer.domElement.addEventListener('touchend', function() {
-                initialDistance = 0;
-            });
-        }
-        
-        // Toggle measurement mode
-        function toggleMeasurementMode() {
-            measurementMode = !measurementMode;
-            
-            if (measurementMode) {
-                // Clear previous measurements
-                measurePoints = [];
-                if (measureLine) {
-                    scene.remove(measureLine);
-                    measureLine = null;
-                }
-                
-                // Change cursor
-                renderer.domElement.style.cursor = 'crosshair';
-                
-                // Add click listener for measurements
-                renderer.domElement.addEventListener('click', onMeasurementClick);
-                
-                // Update button
-                document.getElementById('measureDistance').innerHTML = 
-                    '<i class="fas fa-times"></i> Cancel Measurement';
-                    
-                // Show instructions
-                document.getElementById('instructions').innerHTML = `
-                    <div class="instructions-title">
-                        <i class="fas fa-ruler"></i>
-                        MEASUREMENT MODE
-                    </div>
-                    <div class="instructions-content">
-                        Click on two points to measure distance<br>
-                        Press ESC to cancel
-                    </div>
-                `;
-            } else {
-                // Restore normal cursor
-                renderer.domElement.style.cursor = 'grab';
-                
-                // Remove measurement listener
-                renderer.domElement.removeEventListener('click', onMeasurementClick);
-                
-                // Remove measurement line
-                if (measureLine) {
-                    scene.remove(measureLine);
-                    measureLine = null;
-                }
-                
-                // Update button
-                document.getElementById('measureDistance').innerHTML = 
-                    '<i class="fas fa-ruler"></i> Measure Distance';
-                    
-                // Restore instructions
-                document.getElementById('instructions').innerHTML = `
-                    <div class="instructions-title">
-                        <i class="fas fa-info-circle"></i>
-                        HOW TO INTERACT
-                    </div>
-                    <div class="instructions-content">
-                        <span style="color: #667eea;">• Tap/Drag:</span> Rotate 
-                        <span style="color: #667eea; margin-left: 15px;">• Scroll/Pinch:</span> Zoom 
-                        <span style="color: #667eea; margin-left: 15px;">• Right-click/Hold:</span> Pan
-                    </div>
-                `;
-            }
-        }
-        
-        // Handle measurement clicks
-        function onMeasurementClick(event) {
-            const mouse = new THREE.Vector2();
-            const rect = renderer.domElement.getBoundingClientRect();
-            mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-            mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-            
-            const raycaster = new THREE.Raycaster();
-            raycaster.setFromCamera(mouse, camera);
-            
-            const intersects = raycaster.intersectObject(currentModel, true);
-            
-            if (intersects.length > 0) {
-                const point = intersects[0].point;
-                measurePoints.push(point);
-                
-                // Create a sphere at the measurement point
-                const sphereGeometry = new THREE.SphereGeometry(0.02);
-                const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-                const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-                sphere.position.copy(point);
-                scene.add(sphere);
-                
-                // Store reference to remove later
-                measurePoints[measurePoints.length - 1].marker = sphere;
-                
-                if (measurePoints.length === 2) {
-                    // Calculate distance
-                    const distance = measurePoints[0].distanceTo(measurePoints[1]);
-                    const distanceMM = distance * 1000; // Convert to mm
-                    
-                    // Create line between points
-                    const lineGeometry = new THREE.BufferGeometry().setFromPoints(measurePoints);
-                    const lineMaterial = new THREE.LineBasicMaterial({ 
-                        color: 0x00ff00, 
-                        linewidth: 2 
-                    });
-                    
-                    if (measureLine) {
-                        scene.remove(measureLine);
-                    }
-                    
-                    measureLine = new THREE.Line(lineGeometry, lineMaterial);
-                    scene.add(measureLine);
-                    
-                    // Create label
-                    const midPoint = new THREE.Vector3()
-                        .addVectors(measurePoints[0], measurePoints[1])
-                        .multiplyScalar(0.5);
-                    
-                    // Show measurement result
-                    alert(`Distance: ${distanceMM.toFixed(2)} mm`);
-                    
-                    // Reset for next measurement
-                    setTimeout(() => {
-                        measurePoints.forEach(p => {
-                            if (p.marker) scene.remove(p.marker);
-                        });
-                        if (measureLine) scene.remove(measureLine);
-                        measurePoints = [];
-                        measureLine = null;
-                    }, 3000);
-                }
-            }
-        }
-        
-        // Enter AR mode
-        async function enterARMode() {
-            if (!arSupported) {
-                alert('AR is not supported on this device');
-                return;
-            }
-            
-            // Hide UI elements
-            document.getElementById('controls').style.display = 'none';
-            document.getElementById('instructions').style.display = 'none';
-            document.getElementById('arButton').style.display = 'none';
-            
-            // Configure renderer for AR
-            renderer.xr.enabled = true;
-            
-            // Create AR button
-            const arButton = document.createElement('button');
-            arButton.innerHTML = '<i class="fas fa-times"></i> Exit AR';
-            arButton.className = 'btn';
-            arButton.style.position = 'absolute';
-            arButton.style.bottom = '20px';
-            arButton.style.left = '50%';
-            arButton.style.transform = 'translateX(-50%)';
-            arButton.style.zIndex = '1000';
-            arButton.onclick = exitARMode;
-            document.getElementById('container').appendChild(arButton);
-            
-            // Start AR session
-            const session = await navigator.xr.requestSession('immersive-ar', {
-                requiredFeatures: ['hit-test'],
-                optionalFeatures: ['dom-overlay'],
-                domOverlay: { root: document.body }
-            });
-            
-            renderer.xr.setSession(session);
-            isARMode = true;
-            
-            // Scale model for AR
-            currentModel.scale.set(0.5, 0.5, 0.5);
-            
-            // Position model in front of camera
-            currentModel.position.set(0, 0, -2);
-        }
-        
-        // Exit AR mode
-        function exitARMode() {
-            if (!isARMode) return;
-            
-            // Exit XR session
-            if (renderer.xr.getSession()) {
-                renderer.xr.getSession().end();
-            }
-            
-            renderer.xr.enabled = false;
-            isARMode = false;
-            
-            // Show UI elements
-            document.getElementById('controls').style.display = 'block';
-            document.getElementById('instructions').style.display = 'block';
-            document.getElementById('arButton').style.display = 'block';
-            
-            // Remove exit button
-            const exitButton = document.querySelector('#container button:last-child');
-            if (exitButton) {
-                exitButton.remove();
-            }
-            
-            // Reset model scale and position
-            currentModel.scale.set(1, 1, 1);
-            centerModel(currentModel);
-        }
-        
         // Animation loop
         function animate() {
             requestAnimationFrame(animate);
-            
-            // Update controls
             controls.update();
-            
-            // Auto rotate if enabled
-            if (autoRotate) {
-                currentModel.rotation.y += 0.005;
-            }
-            
-            // Render scene
             renderer.render(scene, camera);
         }
         

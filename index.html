@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Model Viewer - Admin</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>3D Model Viewer - Admin</h1>
+        </header>
+        
+        <div class="upload-section">
+            <div class="drop-zone" id="dropZone">
+                <input type="file" id="fileInput" accept=".glb,.gltf" hidden>
+                <div class="drop-content">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="17 8 12 3 7 8"/>
+                        <line x1="12" y1="3" x2="12" y2="15"/>
+                    </svg>
+                    <h3>Upload GLB/GLTF File</h3>
+                    <p>Drag & drop or click to select</p>
+                    <p class="file-info">Supported formats: .glb, .gltf</p>
+                    <button class="btn" onclick="document.getElementById('fileInput').click()">
+                        Select File
+                    </button>
+                </div>
+            </div>
+            
+            <div class="file-info-section" id="fileInfo" style="display: none;">
+                <h3>Selected File:</h3>
+                <p id="fileName"></p>
+                <p id="fileSize"></p>
+                
+                <div class="preview-container">
+                    <div id="previewCanvas"></div>
+                </div>
+                
+                <button class="btn btn-primary" id="generateBtn" disabled>
+                    Generate Share Link
+                </button>
+                
+                <div class="link-section" id="linkSection" style="display: none;">
+                    <h3>Shareable Link:</h3>
+                    <div class="link-container">
+                        <input type="text" id="shareLink" readonly>
+                        <button class="btn btn-secondary" onclick="copyLink()">Copy</button>
+                    </div>
+                    <p class="note">This link allows viewing with rotation, zoom, and measurement tools.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="admin.js"></script>
+</body>
+</html>

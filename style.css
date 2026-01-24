@@ -1,0 +1,206 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container, .viewer-container {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    width: 90%;
+    max-width: 1200px;
+    overflow: hidden;
+}
+
+header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem;
+    text-align: center;
+}
+
+h1 {
+    font-size: 2.5rem;
+    font-weight: 300;
+}
+
+.upload-section {
+    padding: 2rem;
+}
+
+.drop-zone {
+    border: 3px dashed #667eea;
+    border-radius: 15px;
+    padding: 3rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 2rem;
+}
+
+.drop-zone:hover {
+    background: #f7f7ff;
+    border-color: #764ba2;
+}
+
+.drop-zone svg {
+    margin-bottom: 1rem;
+    stroke: #667eea;
+}
+
+.drop-content h3 {
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.drop-content p {
+    color: #666;
+    margin-bottom: 1rem;
+}
+
+.btn {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    margin: 0.5rem;
+}
+
+.btn:hover {
+    background: #764ba2;
+    transform: translateY(-2px);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.btn-secondary {
+    background: #4CAF50;
+}
+
+.file-info-section {
+    background: #f9f9ff;
+    padding: 2rem;
+    border-radius: 15px;
+    margin-top: 2rem;
+}
+
+.preview-container {
+    width: 100%;
+    height: 400px;
+    background: #000;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 1rem 0;
+}
+
+.link-section {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #ddd;
+}
+
+.link-container {
+    display: flex;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.link-container input {
+    flex: 1;
+    padding: 0.8rem;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.note {
+    color: #666;
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+/* Viewer Styles */
+.viewer-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.controls {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.control-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.control-group label {
+    margin-right: 0.5rem;
+}
+
+.control-group select {
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: none;
+}
+
+.viewer-content {
+    display: flex;
+    height: 600px;
+}
+
+#viewerCanvas {
+    flex: 3;
+    background: #000;
+}
+
+.measurement-info {
+    flex: 1;
+    background: #f9f9ff;
+    padding: 1.5rem;
+    border-left: 1px solid #ddd;
+}
+
+.measurement-info h3 {
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.measurement-info p {
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+#distanceDisplay, #thicknessDisplay {
+    font-weight: bold;
+    color: #667eea;
+}
+
+canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}

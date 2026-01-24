@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Model Viewer</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+    <div class="viewer-container">
+        <div class="viewer-header">
+            <h1>3D Model Viewer</h1>
+            <div class="controls">
+                <div class="control-group">
+                    <label>Units:</label>
+                    <select id="unitSelect">
+                        <option value="cm">Centimeters (cm)</option>
+                        <option value="inch">Inches (inch)</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>
+                        <input type="checkbox" id="gridToggle" checked>
+                        Show Grid
+                    </label>
+                </div>
+                <div class="control-group">
+                    <button class="btn" id="measureBtn">Measure</button>
+                    <button class="btn" id="clearBtn">Clear Measurements</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="viewer-content">
+            <div id="viewerCanvas"></div>
+            <div class="measurement-info" id="measurementInfo">
+                <h3>Measurement Tool</h3>
+                <p>Click "Measure" button, then click two points on the model.</p>
+                <p id="distanceDisplay">Distance: --</p>
+                <p id="thicknessDisplay">Thickness: --</p>
+            </div>
+        </div>
+    </div>
+    
+    <script src="viewer.js"></script>
+</body>
+</html>
